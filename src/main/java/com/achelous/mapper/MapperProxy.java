@@ -1,9 +1,11 @@
-package com.achelous.jdbc;
+package com.achelous.mapper;
 
+import com.achelous.beans.MethodMapper;
 import com.achelous.session.SqlSession;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * @Author: FanJiang.
@@ -20,9 +22,11 @@ public class MapperProxy implements InvocationHandler {
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        // TODO  check the method is a valid mapperRegistry（get @mapper and the method relation）
-        Object mapper = sqlSession.getMapper(interfaceMapper);
-
-        return sqlSession.selectOne("", args, null);
+        //check the method is a valid mapperRegistry（get @mapper and the method relation）
+        Map<String, MethodMapper> mapper = sqlSession.getMethodMapper(interfaceMapper);
+        MethodMapper methodMapper = mapper.get(method.getName());
+        System.out.println("SQL ------->" + methodMapper.getSql());
+        System.out.println("Parameter ------->" + args[0]);
+        return sqlSession.selectOne(methodMapper.getSql(), args[0], methodMapper.getReturnType());
     }
 }

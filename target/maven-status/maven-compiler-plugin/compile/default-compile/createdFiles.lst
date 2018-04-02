@@ -1,0 +1,13 @@
+com\achelous\Client.class
+com\achelous\annotation\Mapper.class
+com\achelous\configuration\executor\SimpleExecutor.class
+com\achelous\mapper\MapperProxy.class
+com\achelous\configuration\DataSource.class
+com\achelous\configuration\Configuration.class
+com\achelous\configuration\MapperRegistry.class
+com\achelous\dao\TestMapper.class
+com\achelous\session\SqlSession.class
+com\achelous\session\impl\DefaultSqlSession.class
+com\achelous\beans\Test.class
+com\achelous\configuration\executor\Executor.class
+com\achelous\annotation\Select.class

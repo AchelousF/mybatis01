@@ -1,4 +1,4 @@
-package com.achelous.jdbc;
+package com.achelous.configuration.executor;
 
 /**
  * @Author: FanJiang.
@@ -6,5 +6,5 @@ package com.achelous.jdbc;
  */
 public interface Executor {
 
-    <T> T doQuery(String statement, Object param);
+    <T> T doQuery(String statement, Object param, Class type);
 }
