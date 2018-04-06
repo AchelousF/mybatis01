@@ -1,4 +1,6 @@
-package com.achelous.beans;
+package com.achelous.mapper;
+
+import java.util.Map;
 
 /**
  * @Auther: fanJiang
@@ -8,10 +10,21 @@ public class MethodMapper {
 
     private Class returnType;
     private String sql;
+    private Map<Integer, String> params;
 
-    public MethodMapper(Class returnType, String sql) {
+
+    public MethodMapper(Class returnType, String sql, Map<Integer, String> params) {
         this.returnType = returnType;
         this.sql = sql;
+        this.params = params;
+    }
+
+    public Map<Integer, String> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<Integer, String> params) {
+        this.params = params;
     }
 
     public Class getReturnType() {

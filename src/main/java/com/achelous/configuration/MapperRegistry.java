@@ -2,11 +2,13 @@ package com.achelous.configuration;
 
 
 import com.achelous.annotation.Mapper;
+import com.achelous.annotation.Param;
 import com.achelous.annotation.Select;
-import com.achelous.beans.MethodMapper;
+import com.achelous.mapper.MethodMapper;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.*;
 
 /**
@@ -62,13 +64,24 @@ public class MapperRegistry {
         Map<String, MethodMapper> methodMapper = new HashMap<>();
         Method[] methods = clazz.getMethods();
         for (Method method : methods) {
-            if (!method.isAnnotationPresent(Select.class)) {
-                continue;
+            if (method.isAnnotationPresent(Select.class)) {
+                Select select = method.getAnnotation(Select.class);
+                Class<?> returnType = method.getReturnType();
+                String sql = select.value();
+                Map<Integer, String> paramMap = new HashMap<>();
+                Parameter[] parameters = method.getParameters();
+                for (int i = 0; i < parameters.length; i++) {
+                    String name;
+                    if (parameters[i].isAnnotationPresent(Param.class)){
+                        name = parameters[i].getAnnotation(Param.class).value();
+                    } else {
+                        name = String.valueOf(i);
+                    }
+                    paramMap.put(i, name);
+                }
+                methodMapper.put(method.getName(), new MethodMapper(returnType, sql, paramMap));
             }
-            Select select = method.getAnnotation(Select.class);
-            Class<?> returnType = method.getReturnType();
-            String sql = select.value();
-            methodMapper.put(method.getName(), new MethodMapper(returnType, sql));
+            // TODO   update and  insert;
         }
         return methodMapper;
     }

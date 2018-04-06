@@ -1,7 +1,7 @@
 package com.achelous.session.impl;
 
 import com.achelous.configuration.Configuration;
-import com.achelous.configuration.executor.Executor;
+import com.achelous.executor.Executor;
 import com.achelous.mapper.MapperProxy;
 import com.achelous.session.SqlSession;
 
@@ -26,7 +26,7 @@ public class DefaultSqlSession implements SqlSession {
     }
 
     public <T> T selectOne(String statement, Object param, Class<?> type) {
-        return executor.doQuery(statement, param, type);
+        return executor.query(statement, param, type);
     }
 
     public <T> T getMethodMapper(Class<?> clazz) {

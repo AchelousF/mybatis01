@@ -1,10 +1,10 @@
 package com.achelous.mapper;
 
-import com.achelous.beans.MethodMapper;
 import com.achelous.session.SqlSession;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -25,8 +25,30 @@ public class MapperProxy implements InvocationHandler {
         //check the method is a valid mapperRegistry（get @mapper and the method relation）
         Map<String, MethodMapper> mapper = sqlSession.getMethodMapper(interfaceMapper);
         MethodMapper methodMapper = mapper.get(method.getName());
+        Map<Integer, ParamMapper> params = paramMapperResolve(methodMapper.getParams(), args);
         System.out.println("SQL ------->" + methodMapper.getSql());
-        System.out.println("Parameter ------->" + args[0]);
-        return sqlSession.selectOne(methodMapper.getSql(), args[0], methodMapper.getReturnType());
+        System.out.println("Parameter ------->" + arrayToString(args));
+        return sqlSession.selectOne(methodMapper.getSql(), params, methodMapper.getReturnType());
+    }
+
+    private Map<Integer, ParamMapper> paramMapperResolve(Map<Integer, String> paramMap, Object[] args) {
+        Map<Integer, ParamMapper> resolveResult = new HashMap<>();
+        for (int i = 0; i < args.length; i++) {
+            ParamMapper param = new ParamMapper();
+            param.setId(i);
+            param.setName(paramMap.get(i));
+            param.setValue(args[i].toString());
+            resolveResult.put(i, param);
+        }
+        return resolveResult;
+    }
+
+    private String arrayToString(Object[] args) {
+        StringBuilder param = new StringBuilder("[");
+        for (Object obj : args) {
+            param.append(obj.toString()).append(",");
+        }
+        param.append("]");
+        return param.toString();
     }
 }
