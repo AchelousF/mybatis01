@@ -33,4 +33,9 @@ public class DefaultSqlSession implements SqlSession {
         return configuration.getMapper(clazz);
     }
 
+    @Override
+    public int insert(String statement, Object param) {
+        return executor.insert(statement, param);
+    }
+
 }

@@ -9,6 +9,15 @@ public class ParamMapper {
     private Integer id;
     private String name;
     private String value;
+    private Class<?> type;
+
+    public Class<?> getType() {
+        return type;
+    }
+
+    public void setType(Class<?> type) {
+        this.type = type;
+    }
 
     public Integer getId() {
         return id;

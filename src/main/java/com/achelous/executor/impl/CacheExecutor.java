@@ -32,6 +32,11 @@ public class CacheExecutor implements Executor{
         return (T) cache;
     }
 
+    @Override
+    public int insert(String statement, Object param) {
+        return delegate.insert(statement, param);
+    }
+
     private String getCacheKey(Class type, String statement, Object param) {
         return type + "-" + statement + "-" + param;
     }

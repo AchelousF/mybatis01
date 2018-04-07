@@ -1,5 +1,6 @@
 package com.achelous.mapper;
 
+import com.achelous.Enum.StatementType;
 import com.achelous.session.SqlSession;
 
 import java.lang.reflect.InvocationHandler;
@@ -26,9 +27,15 @@ public class MapperProxy implements InvocationHandler {
         Map<String, MethodMapper> mapper = sqlSession.getMethodMapper(interfaceMapper);
         MethodMapper methodMapper = mapper.get(method.getName());
         Map<Integer, ParamMapper> params = paramMapperResolve(methodMapper.getParams(), args);
-        System.out.println("SQL ------->" + methodMapper.getSql());
+        System.out.println("SQL       ------->" + methodMapper.getSql());
         System.out.println("Parameter ------->" + arrayToString(args));
-        return sqlSession.selectOne(methodMapper.getSql(), params, methodMapper.getReturnType());
+        if (methodMapper.getStatementType().equals(StatementType.SELECT)) {
+            return sqlSession.selectOne(methodMapper.getSql(), params, methodMapper.getReturnType());
+        }
+        if (methodMapper.getStatementType().equals(StatementType.INSERT)) {
+            return sqlSession.insert(methodMapper.getSql(), params);
+        }
+        return null;
     }
 
     private Map<Integer, ParamMapper> paramMapperResolve(Map<Integer, String> paramMap, Object[] args) {
@@ -45,8 +52,12 @@ public class MapperProxy implements InvocationHandler {
 
     private String arrayToString(Object[] args) {
         StringBuilder param = new StringBuilder("[");
-        for (Object obj : args) {
-            param.append(obj.toString()).append(",");
+        for (int i = 0; i < args.length; i++) {
+            if (i == args.length -1) {
+                param.append(args[i].toString());
+            } else {
+                param.append(args[i].toString()).append(",");
+            }
         }
         param.append("]");
         return param.toString();

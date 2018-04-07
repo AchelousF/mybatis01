@@ -7,4 +7,6 @@ public interface SqlSession {
     <T> T selectOne(String statement, Object param, Class<?> type);
 
     <T> T getMethodMapper(Class<?> clazz);
+
+    int insert(String statement, Object param);
 }

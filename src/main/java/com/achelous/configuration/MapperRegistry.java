@@ -1,10 +1,13 @@
 package com.achelous.configuration;
 
 
+import com.achelous.Enum.StatementType;
+import com.achelous.annotation.Insert;
 import com.achelous.annotation.Mapper;
 import com.achelous.annotation.Param;
 import com.achelous.annotation.Select;
 import com.achelous.mapper.MethodMapper;
+import com.sun.xml.internal.ws.api.model.ExceptionType;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -68,22 +71,33 @@ public class MapperRegistry {
                 Select select = method.getAnnotation(Select.class);
                 Class<?> returnType = method.getReturnType();
                 String sql = select.value();
-                Map<Integer, String> paramMap = new HashMap<>();
-                Parameter[] parameters = method.getParameters();
-                for (int i = 0; i < parameters.length; i++) {
-                    String name;
-                    if (parameters[i].isAnnotationPresent(Param.class)){
-                        name = parameters[i].getAnnotation(Param.class).value();
-                    } else {
-                        name = String.valueOf(i);
-                    }
-                    paramMap.put(i, name);
-                }
-                methodMapper.put(method.getName(), new MethodMapper(returnType, sql, paramMap));
+                Map<Integer, String> paramMap = getParamMap(method.getParameters());
+                methodMapper.put(method.getName(), new MethodMapper(returnType, sql, paramMap, StatementType.SELECT));
             }
-            // TODO   update and  insert;
+            if (method.isAnnotationPresent(Insert.class)) {
+                Insert insert = method.getAnnotation(Insert.class);
+                String sql = insert.value();
+                Map<Integer, String> paramMap = getParamMap(method.getParameters());
+                methodMapper.put(method.getName(), new MethodMapper(int.class, sql, paramMap, StatementType.INSERT));
+            }
+            // TODO   update;
         }
         return methodMapper;
+    }
+
+
+    private Map<Integer, String> getParamMap(Parameter[] parameters) {
+        Map<Integer, String> paramMap = new HashMap<>();
+        for (int i = 0; i < parameters.length; i++) {
+            String name;
+            if (parameters[i].isAnnotationPresent(Param.class)){
+                name = parameters[i].getAnnotation(Param.class).value();
+            } else {
+                name = String.valueOf(i);
+            }
+            paramMap.put(i, name);
+        }
+        return paramMap;
     }
 
     private String firstLower(String name) {

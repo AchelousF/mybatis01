@@ -16,6 +16,8 @@ public class SimpleExecutor implements Executor {
 
     private Configuration configuration;
 
+    private StatementHandler statementHandler = new StatementHandler();
+
     public SimpleExecutor(Configuration configuration) {
         this.configuration = configuration;
     }
@@ -23,7 +25,13 @@ public class SimpleExecutor implements Executor {
     @Override
     public <T> T query(String statement, Object param, Class type) {
         Connection connection = getConnection();
-        return new StatementHandler().query(connection, statement, param, type);
+        return statementHandler.query(connection, statement, param, type);
+    }
+
+    @Override
+    public int insert(String statement, Object param) {
+        Connection connection = getConnection();
+        return statementHandler.insert(connection, statement, param);
     }
 
 

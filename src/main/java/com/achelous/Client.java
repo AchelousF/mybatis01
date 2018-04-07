@@ -30,7 +30,8 @@ public class Client {
 
         /** 多表测试 */
         BlogMapper mapper = sqlSession.getMapper(BlogMapper.class);
-        Blog blog = mapper.selectByPrimaryKey(1);
+        Blog blog = mapper.selectByPrimaryKey(5);
+//        int i = mapper.insertOne(5, "mybatis02");
         System.out.println(blog);
     }
 

@@ -1,5 +1,6 @@
 package com.achelous.dao;
 
+import com.achelous.annotation.Insert;
 import com.achelous.annotation.Mapper;
 import com.achelous.annotation.Param;
 import com.achelous.annotation.Select;
@@ -16,4 +17,7 @@ public interface BlogMapper {
 
     @Select("select * from blog where bid = #{id} and name = #{name}")
     Blog selectByIdAndName(@Param("id") Integer id, @Param("name") String name);
+
+    @Insert("insert blog(bid, name) values (#{bid}, #{name})")
+    int insertOne(@Param("bid") Integer bid, @Param("name") String name);
 }

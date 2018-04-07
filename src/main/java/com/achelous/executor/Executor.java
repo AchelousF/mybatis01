@@ -7,4 +7,6 @@ package com.achelous.executor;
 public interface Executor {
 
     <T> T query(String statement, Object param, Class type);
+
+    int insert(String statement, Object param);
 }

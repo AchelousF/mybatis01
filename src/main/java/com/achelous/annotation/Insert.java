@@ -4,12 +4,13 @@ import java.lang.annotation.*;
 
 /**
  * @Auther: fanJiang
- * @Date: Create in 21:20 2018/4/3
+ * @Date: Create in 16:24 2018/4/6
  */
+
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-public @interface Param {
+@Target(ElementType.METHOD)
+public @interface Insert {
 
-    String value() default "";
+    String value();
 }

@@ -11,12 +11,22 @@ public class MethodMapper {
     private Class returnType;
     private String sql;
     private Map<Integer, String> params;
+    private Enum statementType;
 
 
-    public MethodMapper(Class returnType, String sql, Map<Integer, String> params) {
+    public MethodMapper(Class returnType, String sql, Map<Integer, String> params, Enum executorType) {
         this.returnType = returnType;
         this.sql = sql;
         this.params = params;
+        this.statementType = executorType;
+    }
+
+    public Enum getStatementType() {
+        return statementType;
+    }
+
+    public void setStatementType(Enum statementType) {
+        this.statementType = statementType;
     }
 
     public Map<Integer, String> getParams() {
